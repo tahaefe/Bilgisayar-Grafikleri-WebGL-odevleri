@@ -1,0 +1,68 @@
+<html>
+<body>
+<div style="width:420px;height:250px;background-color : red">
+		<div style="width:420px;height:50px;float:left;background-color:red;color:white;font-size:20px;">
+		x Ekseni -1 <input id="slidex" type="range"
+		min="-2.6" max="2.6" step="0.1" value="0" /> 1 
+		</div>
+
+		<div style="width:420px;height:50px;float:left;background-color:white;color:red;font-size:20px;">
+		Y ekseni -1 <input id="slidey" type="range"
+		min="-2.3" max="2.2" step="0.1" value="0" />
+		1 </div>
+		<div style="width:420px;height:50px;float:left;background-color:red;color:white;font-size:20px;">
+		olcek 0 <input id="slideol" type="range"
+		min="0" max="3.5" step="0.1" value="1.0" />
+		1 </div>
+		
+		<button id = "acibt" style="width:210px;height:50px;float:left;background-color:black;color:red;font-size:20px;"> 
+		aci onayla
+        </button>
+<input id = "acinput" style="width:210px;height:50px;float:left;background-color:white;color:red;font-size:20px;">  </input>
+<button id = "renkbt" style="width:150px;height:50px;float:left;background-color:black;color:red;font-size:20px;"> 
+		rengi onayla
+</button>
+<input id = "input1" style="width:90px;height:50px;float:left;background-color:red;color:white;font-size:20px;">  </input>
+   <input id = "input2" style="width:90px;height:50px;float:left;background-color:green;color:white;font-size:20px;">  </input>
+   <input id = "input3" style="width:90px;height:50px;float:left;background-color:blue;color:white;font-size:20px;">  </input>
+   
+   
+</div>
+<canvas id="glcanvas" width="512" height="512" style="position:absolute;margin-left:450px;float:left;margin-top:-200px;"></canvas>
+
+</body>
+<script id="vertex-shader" type="x-shader/x-vertex">
+   attribute vec4 vPosition;
+  // uniform float color;
+   
+   uniform vec4 translation;
+   uniform mat4 u_xformMatrix;
+   uniform mat4 u_rotation;
+   void main(){ 
+   //gl_Position = vPosition + translation;
+   gl_Position = u_xformMatrix *u_rotation*vPosition+translation;
+   //u_xformMatrix * vPosition+translation;
+     // gl_Position.x =   //cos(theta) * vPosition.x - sin(theta) * vPosition.y;
+	//gl_Position.y =  //sin(theta) * vPosition.x + cos(theta) * vPosition.y;
+	//gl_Position.z = 0.0;
+	//gl_Position.w = 1.0;
+	//gl_Position =vPosition.x + (xkay);
+	//gl_Position= vPosition.y + (ykay);
+	
+}
+
+</script>
+<script id="fragment-shader" type="x-shader/x-fragment"> 
+   precision mediump float; 
+   uniform vec4 u_color;
+
+void main() {
+   gl_FragColor = u_color;
+}
+</script>
+
+<script src="webgl-utils.js"></script>
+<script src="initShaders.js"> </script>
+<script src="MV.js"> </script>
+<script src="18290017-yodv1.js"> </script>
+</html>

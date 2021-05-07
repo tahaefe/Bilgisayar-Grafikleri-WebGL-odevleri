@@ -1,0 +1,36 @@
+window.addEventListener("keydown", function (event) {
+        switch (event.key) {
+                case "x":
+
+                    modelViewMatrix = mult(rotateX(5), modelViewMatrix);
+                    gl.uniformMatrix4fv( modelViewMatrixLoc, false, flatten(modelViewMatrix));
+
+                    normalMatrix = transpose(inverse(modelViewMatrix));
+                    gl.uniformMatrix4fv(normalMatrixLoc, false, flatten(normalMatrix));
+
+                    render();
+                break;
+
+                case "y":
+
+                    modelViewMatrix = mult(rotateY(5), modelViewMatrix);
+                    gl.uniformMatrix4fv( modelViewMatrixLoc, false, flatten(modelViewMatrix));
+
+                    normalMatrix = transpose(inverse(modelViewMatrix));
+                    gl.uniformMatrix4fv(normalMatrixLoc, false, flatten(normalMatrix));
+
+                    render();
+                break;
+
+                case "z":
+
+                    modelViewMatrix = mult(rotateZ(5), modelViewMatrix);
+                    gl.uniformMatrix4fv( modelViewMatrixLoc, false, flatten(modelViewMatrix));
+
+                    normalMatrix = transpose(inverse(modelViewMatrix));
+                    gl.uniformMatrix4fv(normalMatrixLoc, false, flatten(normalMatrix));
+
+                    render();
+                break;
+        };
+    })

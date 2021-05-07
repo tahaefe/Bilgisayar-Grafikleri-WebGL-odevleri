@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<style>
+.RSlider{
+  background: linear-gradient(to right, rgb(1,1,1) , rgb(1,1,1) );
+  border:thick silver solid 1px ;
+  border-radius: 8px;
+  height: 12px;
+  width: 180px;
+  outline: none;
+  transition: background 450ms ease-in;
+  -webkit-appearance: none;
+}
+.RSlider::-webkit-slider-thumb {
+  width: 15px;
+  -webkit-appearance: none;
+  height: 12px;
+      background: #708090;
+  border-radius: 2px;
+}
+</style>
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+
+attribute vec4 vPosition;
+attribute vec4 vNormal;
+varying vec3  L, E;
+uniform mat4 modelViewMatrix;
+uniform mat4 projectionMatrix;
+uniform vec4 lightPosition;
+uniform mat4 normalMatrix;
+attribute vec2 vTexCoords;
+varying vec2 fTexCoords;
+varying vec3 normalInterp;
+void main()
+{
+	fTexCoords = 0.5 * vTexCoords;
+    vec3 pos = (modelViewMatrix * vPosition).xyz;
+    
+    if(lightPosition.w == 0.0) L = normalize(-lightPosition.xyz);
+    else L = normalize( lightPosition.xyz - pos );
+    
+    E =  -normalize(pos);
+	
+    //N = normalize( normalMatrix*vNormal).xyz;
+	normalInterp = mat3(normalMatrix) * vNormal.xyz;
+    gl_Position = projectionMatrix * modelViewMatrix * vPosition;
+    
+}
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+
+precision mediump float;
+varying vec3 normalInterp;
+uniform vec4 ambientProduct;
+uniform vec4 diffuseProduct;
+uniform vec4 specularProduct;
+uniform float shininess;
+varying vec3  L, E;
+varying vec2 fTexCoords;
+uniform sampler2D texMap;
+void main()
+{    
+    vec4 fColor;
+    vec3 N = normalize(normalInterp);
+    vec3 H = normalize( L + E );
+    vec4 ambient = ambientProduct;
+
+    float Kd = max( dot(L, N), 0.0 );
+    vec4  diffuse = Kd*diffuseProduct;
+
+    float Ks = pow( max(dot(N, H), 0.0), shininess );
+    vec4  specular = Ks * specularProduct;
+    
+    if( dot(L, N) < 0.0 ) specular = vec4(0.0, 0.0, 0.0, 1.0);
+
+    fColor = ambient + diffuse +specular;
+    fColor.a = 1.0;
+
+    gl_FragColor = fColor* texture2D(texMap,fTexCoords);
+}
+</script>
+
+
+
+    <script src="initShaders.js"></script>
+    <script src="MV.js"></script>
+   <script src="18290017.js"></script>
+   <script src="webgl-utils.js"></script>
+
+<body>
+<canvas id="gl-canvas" width="512" height="512">
+</canvas>
+<div>
+		X Isık -1 <input id="slidelx" class="RSlider" type="range"
+		min="-1000" max="1000" step="1" value="0" />
+		1 
+		<br>
+		Y Isık -1 <input id="slidely" class="RSlider" type="range"
+		min="-1000" max="1000" step="1" value="100" />
+		1 
+		<br>
+		Z Isık -1 <input id="slidelz" class="RSlider" type="range"
+		min="-1000" max="1000" step="1" value="100" />
+		1 
+		</div>
+<p> </p>
+<button id = "XButton" style="width:100px;height:40px;background-color:	#C62828;color:white;">Rotate X</button>
+<button id = "YButton" style="width:100px;height:40px;background-color:	#C62828;color:white;">Rotate Y</button>
+<button id = "ZButton" style="width:100px;height:40px;background-color:	#C62828;color:white;">Rotate Z</button>
+
+
+<button id = "WButton"style="width:100px;height:40px;background-color:	#C62828;color:white;">Wireframe</button>
+<button id = "SButton"style="width:100px;height:40px;background-color:	#C62828;color:white;">Shaded</button>
+<br>
+<button id = "TOFButton"style="width:100px;height:40px;background-color:	#C62828;color:white;">Texture off</button>
+<button id = "TONButton"style="width:100px;height:40px;background-color:	#C62828;color:white;">Texture on</button>
+
+
+<p> </p>
+
+
+</body>
+</html>
